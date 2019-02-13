@@ -1,5 +1,5 @@
 
-w to contribute to a Solace Project
+# Contribute to a Solace Project
 
 We'd love for you to contribute and welcome your help. Here are some guidelines to follow:
 
