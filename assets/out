@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+echo "Out operation not supported by the Solace Product Download resource" >&2

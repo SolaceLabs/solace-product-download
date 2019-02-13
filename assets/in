@@ -1,0 +1,95 @@
+#!/bin/bash
+
+set -e
+
+source /opt/resource/common.sh
+
+log "Solace Product Download"
+
+readPayload
+
+export CONFIG_CHECKSUM=$(getPayloadProperty ".version.config_checksum")
+export USERNAME=$(getPayloadProperty ".source.username")
+export PASSWORD=$(getPayloadProperty ".source.password")
+export ACCEPT_TERMS=$(getPayloadProperty ".source.accept_terms")
+export FILEPATH=$(getPayloadProperty ".source.filepath")
+export PIVNET_REFRESH_TOKEN=$(getPayloadProperty ".source.pivnet_token")
+export TARGET_DIRECTORY="$1"
+
+if [ -z $TARGET_DIRECTORY ]; then
+  log "Usage: $0 <target>"
+  exit 1
+fi
+
+if [ -z "$USERNAME" ]; then
+  log "Solace Product username must be specified in source block. 'username: <username>'"
+  echo "{}"
+  exit 1
+fi
+
+if [ -z "$PASSWORD" ]; then
+  log "Solace Product password must be specified in source block. 'password: <password>'"
+  echo "{}"
+  exit 1
+fi
+
+log "Acceptance of terms: $ACCEPT"
+
+if [ "$ACCEPT_TERMS" != "true" ]; then
+  log "Accepting the Solace License Agreement is required to download products from solace. Please add 'accept_terms: true' to the resource 'source' section."
+  echo "{}"
+  exit 1
+fi
+
+if [ ! -z "$PIVNET_REFRESH_TOKEN" ]; then
+  log "Pivnet refresh token provided, discovering latest version from Pivnet"
+  log
+
+  getPivnetRefreshToken
+
+  downloadChecksumFromPivnet
+
+  if [ -z $CHECKSUM_FILE ]; then
+    log "Checksum file could not be downloaded!"
+    exit 1
+  fi
+
+  log "Successfully downloaded checksum from $pubsub_checksum_url"
+  log
+
+  parseChecksum $CHECKSUM_FILE
+  export FILEPATH="/products/$PUBSUB_GA/PCF/Current/$PUBSUB_VERSION/$PUBSUB_FILENAME"
+  
+  log "Discovered filepath $filepath from checksum"
+  log
+fi
+
+if [ -z "$FILEPATH" ]; then
+  log "File path must be specified in source block for Solace Product Download resource or a Pivnet refresh token must be provided. 'filepath: <path>' or 'pivnet_token: <pivnet_token>'"
+  echo "{}"
+  exit 1
+fi
+
+export FLAGS="-u $USERNAME -p $PASSWORD -d $FILEPATH -a"
+
+if [ ! -z "$CHECKSUM_FILE" ]; then
+  FLAGS="$FLAGS -c $CHECKSUM_FILE"
+fi
+
+log "Downloading $FILEPATH, will be placed in $TARGET_DIRECTORY"
+
+/opt/resource/downloadLicensedSolaceProduct.sh $FLAGS >&2
+
+if [ "$(ls | grep .pivotal | wc -l)" -eq 0 ]; then
+  log "Could not find enterprise tile at $FILEPATH, is it released?"
+  exit 1
+fi
+
+mv *.pdf $TARGET_DIRECTORY
+mv *.pivotal $TARGET_DIRECTORY
+ls $TARGET_DIRECTORY >&2
+
+version_id=${PUBSUB_PIVNET_VERSION_ID:-""}
+downloaded_filename="$(basename $FILEPATH)"
+
+echo "{\"version\": {\"config_checksum\":\"$CONFIG_CHECKSUM\",\"pubsub_version_id\":\"$version_id\"}, \"metadata\":[{\"name\":\"filename\",\"value\":\"$downloaded_filename\"}]}"
