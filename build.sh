@@ -51,8 +51,10 @@ while getopts "u:p:r:lh" arg; do
 done
 
 echo "Building $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME"
-
 sudo docker build . -t "$SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME"
+
+echo "Tagging $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME with $SOLACE_PRODUCT_DOWNLOAD_NAME:latest"
+sudo docker tag $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME:latest
 
 if [ -z $DOCKER_LOCAL_ONLY ]; then
   if [ ! -z $DOCKER_REGISTRY ]; then
