@@ -13,10 +13,10 @@ A project that supports automation for downloading Solace Products from (https:/
 * [Additional Resources](#additional-resources)
 ---
 ## Overview
-The SolaceProductDownload implements a Concourse resource. The resource facilitates calling the [downloadLicensedSolaceProduct](bin/downloadLicensedSolaceProduct.sh) script used to download products from Solace. The script can download any product from the [Solace Products domain](https://products.solace.com/).
+The solace-product-download implements a Concourse resource. The resource facilitates calling the [downloadLicensedSolaceProduct](bin/downloadLicensedSolaceProduct.sh) script used to download products from Solace. The script can download any product from the [Solace Products domain](https://products.solace.com/).
 
 ## Concourse Configurations
-SolaceProductDownload can be added to a Concourse pipeline yaml. There are a couple of possible supported configurations.
+solace-product-download can be added to a Concourse pipeline yaml. There are a couple of possible supported configurations.
 #### Direct download
 ```
 resource_types:
