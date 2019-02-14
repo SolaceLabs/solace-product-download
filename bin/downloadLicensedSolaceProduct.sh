@@ -39,12 +39,17 @@ export MD5SUM_CMD=$( which md5sum || which gmd5sum )
 ## Default checksum using md5
 export CHECKSUM_CMD=${CHECKSUM_CMD:-$MD5SUM_CMD}
 
+export CORRECTED_CHECKSUM_FILE=$( mktemp )
+
 ##
 # A chance to clean up when done
 ##
 function downloadCleanup {
   if [ -f $COOKIES_FILE ]; then
     rm -f $COOKIES_FILE
+  fi
+  if [ -f $CORRECTED_CHECKSUM_FILE ]; then
+   rm -f $CORRECTED_CHECKSUM_FILE
   fi
 }
 trap downloadCleanup EXIT INT TERM HUP
@@ -106,11 +111,17 @@ function downloadProduct() {
   
 } 
 
+## Some version of checksum commands are picky over spacing - rewrite with 2 spaces between checksum and filename.
+function correctCheckSumFile() {
+        cat $1 | awk '{ print $1"  "$2 }' > $CORRECTED_CHECKSUM_FILE
+        echo $CORRECTED_CHECKSUM_FILE
+}
+
 function validateChecksum() {
 
   PRODUCT_PATH=$1
   PRODUCT_FILE=$( basename $PRODUCT_PATH )
-  PRODUCT_CHECKSUM=$2
+  PRODUCT_CHECKSUM=$( correctCheckSumFile $2 )
 
   if [ -f $PRODUCT_FILE ] && [ -f $PRODUCT_CHECKSUM ] && [ -x $CHECKSUM_CMD ]; then
      printf "Checksum command\t\t\t%s\n" "$CHECKSUM_CMD -c $PRODUCT_CHECKSUM"
