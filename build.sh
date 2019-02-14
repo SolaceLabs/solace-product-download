@@ -51,30 +51,30 @@ while getopts "u:p:r:lh" arg; do
 done
 
 echo "Building $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME"
-sudo docker build . -t "$SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME"
+docker build . -t "$SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME"
 
 echo "Tagging $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME with $SOLACE_PRODUCT_DOWNLOAD_NAME:latest"
-sudo docker tag $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME:latest
+docker tag $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME:latest
 
 if [ -z $DOCKER_LOCAL_ONLY ]; then
   if [ ! -z $DOCKER_REGISTRY ]; then
     echo "Using docker registry $DOCKER_REGISTRY"
     export SOLACE_PRODUCT_DOWNLOAD_DOCKER_TARGET="$DOCKER_REGISTRY/$SOLACE_PRODUCT_DOWNLOAD_NAME"
     echo "Tagging $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME with $SOLACE_PRODUCT_DOWNLOAD_DOCKER_TARGET"
-    sudo docker tag $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME $SOLACE_PRODUCT_DOWNLOAD_DOCKER_TARGET
+    docker tag $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME $SOLACE_PRODUCT_DOWNLOAD_DOCKER_TARGET
   else
     echo "Using docker hub"
   fi
 
   if [ ! -z $DOCKER_USERNAME ] && [ ! -z $DOCKER_PASSWORD ]; then
     echo "Logging into docker as $DOCKER_USERNAME"
-    sudo docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   else
     echo "No docker credentials provided, not attempting login"
   fi
 
-  echo "Pushing $SOLACE_PRODUCT_DOWNLOAD_DOCKER_TARGET to $DOCKER_REGISTRY"
-  sudo docker push "$SOLACE_PRODUCT_DOWNLOAD_DOCKER_TARGET"
+  echo "Pushing $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME:latest $DOCKER_REGISTRY"
+  docker push $SOLACE_PRODUCT_DOWNLOAD_DOCKER_NAME:latest
 else
   echo "Local build only, will not push to docker registry"
 fi
