@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/SolaceProducts/solace-product-download.svg?branch=master)](https://travis-ci.org/SolaceProducts/solace-product-download)
+[![Build Status](https://travis-ci.org/SolaceDev/solace-product-download.svg?branch=master)](https://travis-ci.org/SolaceDev/solace-product-download)
 
 # Solace Product Download
 A project that supports automation for downloading Solace Products from (https://products.solace.com). It does so by providing an implementation of a Concourse resource to perform this download.
