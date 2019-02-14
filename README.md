@@ -30,8 +30,8 @@ resource:
 - name: solace-tile
   type: solace-product-download
   source:
-    username: "solace-product-username"
-    password: "solace-product-password"
+    username: {{solace-product-username}}
+    password: {{solace-product-password}}
     filepath: "/products/2.2GA/PCF/Current/2.2.1/solace-pubsub-2.2.1-enterprise.pivotal"
     accept_terms: true
   [...]
@@ -59,9 +59,9 @@ resource:
 - name: solace-tile
   type: solace-product-download
   source:
-    username: "solace-product-username"
-    password: "solace-product-password"
-    pivnet_token: "<my pivnet token>" # Pivotal Network UAA token found in Settings
+    username: {{solace-product-username}}
+    password: {{solace-product-password}}
+    pivnet_token: {{uaa_refresh_token_for_pivnet}} # Pivotal Network UAA token found in Settings
     accept_terms: true
   [...]
 jobs:

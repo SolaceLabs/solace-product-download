@@ -10,9 +10,9 @@ resources:
 - name: solace-tile
   type: tile
   source:
-    username: "my_solace_username"
-    password: "my_solace_password"
-    pivnet_token: "<uaa refresh token from pivnet>" 
+    username: {{my_solace_username}}
+    password: {{my_solace_password}}
+    pivnet_token: {{uaa_refresh_token_for_pivnet}}
     accept_terms: true
 jobs:
 - name: demo-resource
