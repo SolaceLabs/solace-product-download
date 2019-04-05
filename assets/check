@@ -8,7 +8,7 @@ log "Checking version of Solace Product Download resource"
 
 readPayload
 
-current_checksum=$(/usr/bin/sha256sum $PAYLOAD | awk '{ print $1 }')
+current_checksum=$(cat $PAYLOAD | /usr/bin/jq '.source' | /usr/bin/sha256sum | awk '{ print $1 }')
 last_checksum=$(getPayloadProperty ".version.config_checksum")
 
 log "Last checksum $last_checksum, current checksum $current_checksum"

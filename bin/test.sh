@@ -75,7 +75,7 @@ function testCheckScriptChecksum() {
   tmpfile=$(mktemp)
   echo $input > $tmpfile
   output=$(./check 2> /dev/null < $tmpfile)
-  expected_checksum=$( $SHA256SUM_CMD $tmpfile | awk '{ print $1 }')
+  expected_checksum=$( cat $tmpfile | jq '.source' | $SHA256SUM_CMD | awk '{ print $1 }')
   actual_checksum=$(echo "$output" | jq -r '.[0].config_checksum // ""')
   if [ ! "$expected_checksum" == "$actual_checksum" ]; then
     echo "Checksum did not match expected! Expected $expected_checksum got $actual_checksum"
