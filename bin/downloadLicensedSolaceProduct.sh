@@ -93,7 +93,7 @@ function downloadProduct() {
   PRODUCT_PATH=$1
   PRODUCT_FILE=$( basename $PRODUCT_PATH )
   printf "Downloading\t\t\t\t%s\n" "$PRODUCT_PATH"
-  export DOWNLOAD_RESPONSE=$( curl -s -w '%{http_code}' -X GET  -b cookies.txt $SOLACE_PRODUCTS_DOWNLOAD_URL/$PRODUCT_PATH -o $PRODUCT_FILE )
+  curl $2 -X GET  -b cookies.txt $SOLACE_PRODUCTS_DOWNLOAD_URL/$PRODUCT_PATH -o $PRODUCT_FILE
   ## check for a login redirect, hence a failed login, the downloaded file will be the login form..
   REDIRECTED_COUNT=$( grep "location" $PRODUCT_FILE | grep "$PRODUCT_FILE" | wc -l )
   if [ "$REDIRECTED_COUNT" -eq "0" ]; then
@@ -223,8 +223,8 @@ fi
 checkRequiredVariables "SOLACE_USER SOLACE_USER_PASSWORD DOWNLOAD_FILE_PATH ACCEPT_LICENSE"
 
 authenticateAndAcceptSolaceLicenseAgreement $SOLACE_USER $SOLACE_USER_PASSWORD
-downloadProduct $SOLACE_PRODUCTS_PDF_LICENSE_URL
-downloadProduct $DOWNLOAD_FILE_PATH
+downloadProduct $SOLACE_PRODUCTS_PDF_LICENSE_URL "-s"
+downloadProduct $DOWNLOAD_FILE_PATH "-#"
 
 if [ ! -z $CHECKSUM_FILE ]; then
  validateChecksum $DOWNLOAD_FILE_PATH $CHECKSUM_FILE
