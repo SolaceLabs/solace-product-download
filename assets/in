@@ -33,7 +33,7 @@ if [ -z "$PASSWORD" ]; then
   exit 1
 fi
 
-log "Acceptance of terms: $ACCEPT"
+log "Acceptance of terms: $ACCEPT_TERMS"
 
 if [ "$ACCEPT_TERMS" != "true" ]; then
   log "Accepting the Solace License Agreement is required to download products from solace. Please add 'accept_terms: true' to the resource 'source' section."

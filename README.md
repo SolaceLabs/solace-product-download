@@ -76,7 +76,7 @@ jobs:
 ```
 This configuration, instead of downloading a specific product file based on filepath, will download the latest Solace PubSub+ Enterprise for PCF. This configuration requires a `pivnet_token` as your PivNet credentials in addition to the [Solace products](https://products.solace.com/) credentials.
 With this configuration the `solace-tile` resource will download a checksum file from Pivotal Network Solace Pubsub+ (https://network.pivotal.io/products/solace-pubsub).
-The checksum file will be interpreted to download the corresponding product from [Solace products](https://products.solace.com/), the downloaded file will be verified using this checksum. Using the configuration implies user's acceptance of the Solace Systems Software License Agreement, the accept_terms flag also implies the user's acceptance of the EULA of Solace Pubsub+ on Pivnet found [here](https://network.pivotal.io/legal_document_agreements/686270) which is required to download from PivNet.
+The checksum file will be interpreted to download the corresponding product from [Solace products](https://products.solace.com/), the downloaded file will be verified using this checksum. Using the configuration implies user's acceptance of the Solace Systems Software License Agreement. You must also accept the EULA of Solace Pubsub+ on Pivnet found [here](https://network.pivotal.io/legal_document_agreements/686270) which is required to download from PivNet.
 
 ## Standalone Script
 The [downloadLicensedSolaceProduct](bin/downloadLicensedSolaceProduct.sh) script can be used standalone to automate the download of products from solace. An invocation of the script is as follows
