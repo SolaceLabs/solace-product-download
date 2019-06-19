@@ -112,7 +112,7 @@ See the list of [contributors](graphs/contributors) who participated in this pro
 This project is licensed under the Apache License, Version 2.0. - See [LICENSE](LICENSE) file for details
 ## Additional Resources
 For more information about Concourse resources, check out
-* https://concourse-ci.org/implementing-resources.html
+* https://concourse-ci.org/implementing-resource-types.html
 
 For more information about Solace, visit
 * Solace Homepage https://solace.com
