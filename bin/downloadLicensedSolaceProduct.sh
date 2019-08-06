@@ -93,7 +93,7 @@ function downloadProduct() {
   PRODUCT_PATH=$1
   PRODUCT_FILE=$( basename $PRODUCT_PATH )
   printf "Downloading\t\t\t\t%s\n" "$PRODUCT_PATH"
-  curl $2 -X GET  -b cookies.txt $SOLACE_PRODUCTS_DOWNLOAD_URL/$PRODUCT_PATH -o $PRODUCT_FILE
+  curl $2 -X GET  -b $COOKIES_FILE "$SOLACE_PRODUCTS_DOWNLOAD_URL/$PRODUCT_PATH" -o $PRODUCT_FILE -g
   ## check for a login redirect, hence a failed login, the downloaded file will be the login form..
   REDIRECTED_COUNT=$( grep "location" $PRODUCT_FILE | grep "$PRODUCT_FILE" | wc -l )
   if [ "$REDIRECTED_COUNT" -eq "0" ]; then
