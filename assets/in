@@ -45,7 +45,7 @@ if [ ! -z "$PIVNET_REFRESH_TOKEN" ]; then
   log "Pivnet refresh token provided, discovering latest version from Pivnet"
   log
 
-  getPivnetRefreshToken
+  pivnetAuthentication
 
   downloadChecksumFromPivnet
 
@@ -54,13 +54,10 @@ if [ ! -z "$PIVNET_REFRESH_TOKEN" ]; then
     exit 1
   fi
 
-  log "Successfully downloaded checksum from $pubsub_checksum_url"
-  log
-
-  parseChecksum $CHECKSUM_FILE
-  export FILEPATH="/products/$PUBSUB_GA/PCF/Current/$PUBSUB_VERSION/$PUBSUB_FILENAME"
+  parseChecksum "$CHECKSUM_FILE"
+  export FILEPATH="/products/$PUBSUB_GA/PCF/$PUBSUB_FOLDER/$PUBSUB_VERSION/$PUBSUB_FILENAME"
   
-  log "Discovered filepath $filepath from checksum"
+  log "Discovered filepath $FILEPATH from checksum"
   log
 fi
 

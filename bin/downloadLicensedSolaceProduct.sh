@@ -88,7 +88,6 @@ function authenticateAndAcceptSolaceLicenseAgreement() {
  export LICENSE_RESPONSE=$( curl -s -w '%{http_code}' -X POST -b $COOKIES_FILE -F 'license-submit=1' -F 'acceptcheckbox=1' $SOLACE_PRODUCTS_FORM_URL )
 }
 
-
 function downloadProduct() {
   PRODUCT_PATH=$1
   PRODUCT_FILE=$( basename $PRODUCT_PATH )
@@ -102,13 +101,25 @@ function downloadProduct() {
       rm -f $PRODUCT_FILE
       exit 1
     fi
-    printf "Download %s\t\t\t\t%s\n" "OK" "$PRODUCT_FILE"
+    if [ "$(stat -c %s $PRODUCT_FILE)" -eq "0" ]; then
+      if [ "$(echo "$PRODUCT_PATH" | grep "Current" | wc -l)" -gt "0" ]; then
+        printf "Could not find product with filename $SOLACE_PRODUCTS_DOWNLOAD_URL/$PRODUCT_PATH, will see if it is in the Archive folder...\n"
+        rm -f $PRODUCT_FILE
+        downloadProduct "$(echo "$PRODUCT_PATH" | sed "s/Current/Archive/g")"
+        return
+      else
+        printf "Download %s\t\t\t\t%s\n" "FAILED" "Product file had final size of 0... please check the file exists."
+        rm -f $PRODUCT_FILE
+        exit 1
+      fi
+    else
+      printf "Download %s\t\t\t\t%s\n" "OK" "$PRODUCT_FILE"
+    fi
   else
     printf "Download %s\t\t\t\t%s\n" "FAILED" "Detected a redirect to login... please check the username and password."
     rm -f $PRODUCT_FILE
     exit 1
   fi
-  
 } 
 
 ## Some version of checksum commands are picky over spacing - rewrite with 2 spaces between checksum and filename.

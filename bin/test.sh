@@ -20,6 +20,15 @@ if [ ! -f $IN_SCRIPT ] || [ ! -f $OUT_SCRIPT ]; then
   fi
 fi
 
+function testPivnetCLI() {
+  echo "Making sure pivnet cli is present"
+  PIVNET_CLI="$(which pivnet)"
+  if [ -z "$PIVNET_CLI" ]; then
+    echo "Could not find Pivnet cli in PATH!"
+    exit 1
+  fi
+}
+
 function testDownloadWithMissingLicense() {
   echo "Testing download with missing license"
   failed_dl=$(./downloadLicensedSolaceProduct.sh -u someaccount -p somepassword -d /products/2.2GA/PCF/Current/2.2.1/documentation.html | grep "Accepting the Solace License Agreement is required" | wc -l)
@@ -120,6 +129,15 @@ function testInScript() {
     exit 1
   fi
 }
+
+
+echo
+echo "=================================="
+echo "Asserting Presence of Dependencies"
+echo "=================================="
+echo
+
+testPivnetCLI
 
 echo
 echo "======================="
